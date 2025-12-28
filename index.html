@@ -60,6 +60,12 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
+        .main-logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
         .social-box {
             display: flex;
             justify-content: center;
@@ -194,6 +200,31 @@
             margin: 20px 0;
         }
 
+        .dashboard-link {
+            display: block;
+            background: var(--primary-color);
+            color: var(--bg-color);
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .screenshot-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .screenshot-img {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
         .useful-links-section {
             margin: 40px 0;
             padding: 20px;
@@ -222,6 +253,7 @@
             color: white;
             transition: 0.3s;
             border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 10px;
         }
 
         .useful-link-card:hover {
@@ -250,6 +282,8 @@
 
 <div class="container">
     <header>
+        <img src="https://github.com/PasarGuard/PasarGuard.github.io/raw/main/public/logos/PasarGuard-white-logo.png" alt="PasarGuard Logo" class="main-logo">
+        
         <h1 id="h_title">🛡️ راهنمای نصب پنل پاسارگارد</h1>
         <p><span id="h_instructor">مدرس:</span> <strong>ErfanXRay</strong></p>
         
@@ -278,6 +312,11 @@
                 <input type="text" id="emailInput" placeholder="Email (e.g. admin@gmail.com)">
             </div>
         </div>
+    </div>
+
+    <div class="screenshot-container">
+        <p id="preview_text" style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 10px;">پیش‌نمایش محیط پنل پاسارگارد:</p>
+        <img src="https://github.com/PasarGuard/PasarGuard.github.io/raw/main/public/logos/screenshot.png" alt="PasarGuard Screenshot" class="screenshot-img">
     </div>
 
     <div class="step-card">
@@ -323,7 +362,7 @@ mkdir -p /var/lib/pasarguard/certs
     </div>
 
     <div class="step-card">
-        <h2 id="s3_title">۳. تنظیمات Uvicorn و بررسی نهایی</h2>
+        <h2 id="s3_title">۳. تنظیمات Uvicorn و فعال‌سازی</h2>
         <p id="s3_p1">ویرایش فایل .env:</p>
         <div class="code-box">
             <button class="copy-btn" onclick="copyCode(this)" id="copy5">کپی</button>
@@ -338,28 +377,40 @@ UVICORN_SSL_KEYFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-high
         </div>
 
         <div class="warning-box">
-            <p id="port_check_text" style="margin-top:0; font-weight:bold;">⚠️ قبل از ریستارت، از آزاد بودن پورت ۴۴۳ مطمئن شوید:</p>
-            <div class="code-box" style="margin-bottom:15px;">
+            <p id="port_check_text" style="margin-top:0; font-weight:bold;">⚠️ بررسی پورت ۴۴۳:</p>
+            <div class="code-box" style="margin-bottom:10px;">
                 <button class="copy-btn" onclick="copyCode(this)">کپی</button>
                 <code>sudo ss -tulpn | grep :443</code>
             </div>
-            <p id="nginx_disable_text" style="font-size:0.9rem; opacity:0.9;">اگر خروجی دستور بالا شامل **nginx** بود، آن را غیرفعال کنید:</p>
+            <p id="nginx_disable_text" style="font-size:0.85rem; opacity:0.9;">در صورت تداخل با Nginx:</p>
             <div class="code-box">
                 <button class="copy-btn" onclick="copyCode(this)">کپی</button>
-                <code>sudo systemctl stop nginx
-sudo systemctl disable nginx</code>
+                <code>sudo systemctl stop nginx && sudo systemctl disable nginx</code>
             </div>
         </div>
         
-        <p id="s3_p3" style="color: var(--primary-color); font-weight: bold;">حالا برای اعمال تغییرات، پنل را ریستارت کنید:</p>
+        <p id="s3_p3" style="color: var(--primary-color); font-weight: bold;">ریستارت پنل:</p>
         <div class="code-box">
             <button class="copy-btn" onclick="copyCode(this)" id="copy_restart">کپی</button>
             <code>pasarguard restart</code>
         </div>
+
+        <a href="https://YOUR_DOMAIN/dashboard" target="_blank" class="dashboard-link" id="dash_link">
+            <i class="fas fa-external-link-alt"></i> ورود به پنل (Dashboard)
+        </a>
     </div>
 
     <div class="step-card">
-        <h2 id="s4_title">۴. نصب نود (Node)</h2>
+        <h2 id="s4_title">۴. ساخت یوزر ادمین</h2>
+        <p id="s4_p1">برای دسترسی به داشبورد باید یک ادمین بسازید:</p>
+        <div class="code-box">
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+            <code>pasarguard cli admins --create <span class="var-highlight">admin</span></code>
+        </div>
+    </div>
+
+    <div class="step-card">
+        <h2 id="s5_title">۵. نصب نود (Node)</h2>
         <div class="code-box">
             <button class="copy-btn" onclick="copyCode(this)" id="copy7">کپی</button>
             <code>sudo bash -c "$(curl -sL https://github.com/PasarGuard/scripts/raw/main/pg-node.sh)" @ install</code>
@@ -375,6 +426,13 @@ sudo systemctl disable nginx</code>
             <div class="link-info">
                 <i class="fas fa-tools"></i>
                 <span>DDS XRay Inbound Generator</span>
+            </div>
+            <i class="fas fa-external-link-alt" style="font-size: 0.9rem; opacity: 0.7;"></i>
+        </a>
+        <a href="https://www.lastpass.com/features/password-generator" target="_blank" class="useful-link-card">
+            <div class="link-info">
+                <i class="fas fa-key"></i>
+                <span>Password Generator (LastPass)</span>
             </div>
             <i class="fas fa-external-link-alt" style="font-size: 0.9rem; opacity: 0.7;"></i>
         </a>
@@ -396,19 +454,23 @@ sudo systemctl disable nginx</code>
             btn_yt: "یوتیوب",
             btn_gh: "گیت‌هاب پنل",
             panel_title: "📝 اطلاعات خود را وارد کنید",
+            preview_text: "پیش‌نمایش محیط پنل پاسارگارد:",
             s1_title: "۱. نصب پنل اصلی",
             db_label: "نوع دیتابیس:",
             s2_title: "۲. دریافت گواهی SSL",
             s2_p1: "نصب ابزارها:",
             s2_p2: "نصب Acme.sh:",
             s2_p3: "صدور گواهی:",
-            s3_title: "۳. تنظیمات Uvicorn و بررسی نهایی",
+            s3_title: "۳. تنظیمات Uvicorn و فعال‌سازی",
             s3_p1: "ویرایش فایل .env:",
             s3_p2: "مقادیر زیر را جایگزین کنید (هر ۳ خط):",
-            port_check_text: "⚠️ قبل از ریستارت، از آزاد بودن پورت ۴۴۳ مطمئن شوید:",
-            nginx_disable_text: "اگر خروجی دستور بالا شامل **nginx** بود، آن را غیرفعال کنید:",
-            s3_p3: "حالا برای اعمال تغییرات، پنل را ریستارت کنید:",
-            s4_title: "۴. نصب نود (Node)",
+            port_check_text: "⚠️ بررسی پورت ۴۴۳:",
+            nginx_disable_text: "در صورت تداخل با Nginx:",
+            s3_p3: "ریستارت پنل:",
+            dash_text: "ورود به پنل (Dashboard)",
+            s4_title: "۴. ساخت یوزر ادمین",
+            s4_p1: "برای دسترسی به داشبورد باید یک ادمین بسازید:",
+            s5_title: "۵. نصب نود (Node)",
             useful_links_h: "لینک‌های مفید",
             copy: "کپی",
             copied: "کپی شد! ✅",
@@ -423,19 +485,23 @@ sudo systemctl disable nginx</code>
             btn_yt: "YouTube",
             btn_gh: "GitHub Repo",
             panel_title: "📝 Enter Information",
+            preview_text: "PasarGuard Panel Preview:",
             s1_title: "1. Install Main Panel",
             db_label: "Database Type:",
             s2_title: "2. Get SSL Certificate",
             s2_p1: "Prerequisites:",
             s2_p2: "Install Acme.sh:",
             s2_p3: "Issue Certificate:",
-            s3_title: "3. Uvicorn & Port Check",
+            s3_title: "3. Uvicorn & Activation",
             s3_p1: "Edit .env file:",
             s3_p2: "Update values (all 3 lines):",
-            port_check_text: "⚠️ Before restarting, check if Port 443 is free:",
-            nginx_disable_text: "If the output shows **nginx**, disable it using these commands:",
-            s3_p3: "Now, restart the panel to apply changes:",
-            s4_title: "4. Install Node",
+            port_check_text: "⚠️ Check Port 443:",
+            nginx_disable_text: "In case of Nginx conflict:",
+            s3_p3: "Restart Panel:",
+            dash_text: "Open Panel Dashboard",
+            s4_title: "4. Create Admin User",
+            s4_p1: "You must create an admin to access the dashboard:",
+            s5_title: "5. Install Node",
             useful_links_h: "Useful Links",
             copy: "Copy",
             copied: "Copied! ✅",
@@ -458,6 +524,7 @@ sudo systemctl disable nginx</code>
         document.getElementById('btn_yt').innerText = t.btn_yt;
         document.getElementById('btn_gh').innerText = t.btn_gh;
         document.getElementById('panel_title').innerText = t.panel_title;
+        document.getElementById('preview_text').innerText = t.preview_text;
         document.getElementById('s1_title').innerText = t.s1_title;
         document.getElementById('db_label').innerText = t.db_label;
         document.getElementById('s2_title').innerText = t.s2_title;
@@ -470,7 +537,10 @@ sudo systemctl disable nginx</code>
         document.getElementById('port_check_text').innerText = t.port_check_text;
         document.getElementById('nginx_disable_text').innerText = t.nginx_disable_text;
         document.getElementById('s3_p3').innerText = t.s3_p3;
+        document.getElementById('dash_link').innerHTML = `<i class="fas fa-external-link-alt"></i> ${t.dash_text}`;
         document.getElementById('s4_title').innerText = t.s4_title;
+        document.getElementById('s4_p1').innerText = t.s4_p1;
+        document.getElementById('s5_title').innerText = t.s5_title;
         document.getElementById('useful_links_h').innerText = t.useful_links_h;
         document.getElementById('footer_text').innerText = t.footer;
         document.getElementById('langBtn').innerText = t.langBtn;
@@ -483,11 +553,12 @@ sudo systemctl disable nginx</code>
     const domainInput = document.getElementById('domainInput');
     const emailInput = document.getElementById('emailInput');
     const dbSelect = document.getElementById('dbSelect');
-    const installCommand = document.getElementById('installCommand');
+    const dashLink = document.getElementById('dash_link');
 
     domainInput.addEventListener('input', function() {
         const val = this.value.trim() || 'YOUR_DOMAIN';
         document.querySelectorAll('.domain-ph').forEach(el => el.textContent = val);
+        dashLink.href = `https://${val}/dashboard`;
     });
 
     emailInput.addEventListener('input', function() {
@@ -498,7 +569,7 @@ sudo systemctl disable nginx</code>
     dbSelect.addEventListener('change', function() {
         const baseCmd = 'curl -fsSL https://github.com/PasarGuard/scripts/raw/main/pasarguard.sh -o /tmp/pg.sh && sudo bash /tmp/pg.sh install';
         const db = this.value;
-        installCommand.innerText = db === 'sqlite' ? baseCmd : `${baseCmd} --database ${db}`;
+        document.getElementById('installCommand').innerText = db === 'sqlite' ? baseCmd : `${baseCmd} --database ${db}`;
     });
 
     function copyCode(btn) {
