@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" id="mainHtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">نصب هوشمند پاسارگارد | ErfanXRay</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --input-bg: #334155;
+            --text-color: #f8fafc;
+            --primary-color: #38bdf8;
+            --accent-color: #4ade80;
+            --highlight-color: #facc15;
+            --youtube: #ef4444;
+            --telegram: #0ea5e9;
+        }
+
+        body {
+            font-family: 'Tahoma', 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* دکمه تغییر زبان */
+        .lang-switch {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .btn-lang {
+            background: var(--primary-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .social-box {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn-social {
+            text-decoration: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-social:hover { transform: translateY(-3px); filter: brightness(1.2); }
+        .yt { background: var(--youtube); }
+        .tg { background: var(--telegram); }
+
+        /* اصلاح پنل ورودی‌ها */
+        .config-panel {
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid var(--primary-color);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 30px 0;
+            backdrop-filter: blur(8px);
+        }
+
+        .panel-title {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: row; /* در دسکتاپ کنار هم */
+            gap: 20px;
+            width: 100%;
+        }
+
+        .input-wrapper {
+            flex: 1; /* تقسیم مساوی فضا */
+            position: relative;
+            min-width: 200px;
+        }
+
+        input, select {
+            width: 100%;
+            height: 50px;
+            background: var(--input-bg);
+            border: 2px solid #475569;
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        /* تنظیم پدینگ و آیکون بر اساس جهت صفحه */
+        #mainHtml[dir="rtl"] input { padding: 0 45px 0 15px; text-align: left; }
+        #mainHtml[dir="ltr"] input { padding: 0 15px 0 45px; text-align: left; }
+
+        .input-wrapper i {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        #mainHtml[dir="rtl"] .input-wrapper i { right: 15px; }
+        #mainHtml[dir="ltr"] .input-wrapper i { left: 15px; }
+
+        input:focus { border-color: var(--primary-color); background: #1e293b; }
+
+        /* استایل مراحل */
+        .step-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        h2 { color: var(--accent-color); font-size: 1.4rem; margin-top: 0; }
+
+        .code-box {
+            position: relative;
+            background: #000;
+            border-radius: 10px;
+            margin-top: 15px;
+            padding: 20px 15px 15px 15px;
+            border-right: 4px solid var(--primary-color);
+            direction: ltr;
+        }
+
+        #mainHtml[dir="ltr"] .code-box { border-right: none; border-left: 4px solid var(--primary-color); }
+
+        code { font-family: 'Consolas', 'Monaco', monospace; font-size: 0.95rem; color: #cbd5e1; word-break: break-all; }
+
+        .var-highlight { color: var(--highlight-color); font-weight: bold; }
+
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: 0.3s;
+        }
+
+        .copy-btn:hover { background: var(--primary-color); color: var(--bg-color); }
+
+        footer { text-align: center; padding: 40px 0; opacity: 0.5; font-size: 0.9rem; }
+
+        /* رسپانسیو برای موبایل */
+        @media (max-width: 768px) {
+            .input-group { flex-direction: column; } /* زیر هم قرار گرفتن در موبایل */
+            .input-wrapper { width: 100%; }
+            .config-panel { padding: 15px; }
+            header h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="lang-switch">
+    <button class="btn-lang" onclick="toggleLanguage()" id="langBtn">English</button>
+</div>
+
+<div class="container">
+    <header>
+        <h1 id="h_title">🛡️ راهنمای نصب پنل پاسارگارد</h1>
+        <p><span id="h_instructor">مدرس:</span> <strong>ErfanXRay</strong></p>
+        
+        <div class="social-box">
+            <a href="https://t.me/Erfan_XRay" target="_blank" class="btn-social tg">
+                <i class="fab fa-telegram-plane"></i> <span id="btn_tg">کانال تلگرام</span>
+            </a>
+            <a href="https://www.youtube.com/@Erfan_XRay" target="_blank" class="btn-social yt">
+                <i class="fab fa-youtube"></i> <span id="btn_yt">یوتیوب</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="config-panel">
+        <h3 class="panel-title" id="panel_title">📝 اطلاعات خود را وارد کنید</h3>
+        <div class="input-group">
+            <div class="input-wrapper">
+                <i class="fas fa-globe"></i>
+                <input type="text" id="domainInput" placeholder="Domain (e.g. example.com)">
+            </div>
+            <div class="input-wrapper">
+                <i class="fas fa-envelope"></i>
+                <input type="text" id="emailInput" placeholder="Email (e.g. admin@gmail.com)">
+            </div>
+        </div>
+    </div>
+
+    <div class="step-card">
+        <h2 id="s1_title">۱. نصب پنل اصلی</h2>
+        <div style="margin-bottom: 15px;">
+            <label id="db_label" style="display:block; margin-bottom:8px;">نوع دیتابیس:</label>
+            <select id="dbSelect" dir="ltr" style="padding: 0 15px;">
+                <option value="timescaledb">TimescaleDB (Recommended)</option>
+                <option value="sqlite">SQLite</option>
+                <option value="mysql">MySQL</option>
+                <option value="mariadb">MariaDB</option>
+                <option value="postgresql">PostgreSQL</option>
+            </select>
+        </div>
+        <div class="code-box">
+            <button class="copy-btn" onclick="copyCode(this)" id="copy1">کپی</button>
+            <code id="installCommand">curl -fsSL https://github.com/PasarGuard/scripts/raw/main/pasarguard.sh -o /tmp/pg.sh && sudo bash /tmp/pg.sh install --database timescaledb</code>
+        </div>
+    </div>
+
+    <div class="step-card">
+        <h2 id="s2_title">۲. دریافت گواهی SSL</h2>
+        <p id="s2_p1">نصب ابزارها:</p>
+        <div class="code-box">
+            <button class="copy-btn" onclick="copyCode(this)" id="copy2">کپی</button>
+            <code>apt install curl socat -y</code>
+        </div>
+        <p id="s2_p2">نصب Acme.sh:</p>
+        <div class="code-box">
+            <button class="copy-btn" onclick="copyCode(this)" id="copy3">کپی</button>
+            <code>curl https://get.acme.sh | sh -s email=<span class="email-ph var-highlight">YOUR_EMAIL</span></code>
+        </div>
+        <p id="s2_p3">صدور گواهی:</p>
+        <div class="code-box">
+            <button class="copy-btn" onclick="copyCode(this)" id="copy4">کپی</button>
+            <code>export DOMAIN=<span class="domain-ph var-highlight">YOUR_DOMAIN</span>
+mkdir -p /var/lib/pasarguard/certs
+~/.acme.sh/acme.sh \
+  --issue --force --standalone -d "$DOMAIN" \
+  --fullchain-file "/var/lib/pasarguard/certs/$DOMAIN.cer" \
+  --key-file "/var/lib/pasarguard/certs/$DOMAIN.cer.key"</code>
+        </div>
+    </div>
+
+    <div class="step-card">
+        <h2 id="s3_title">۳. تنظیمات Uvicorn</h2>
+        <p id="s3_p1">ویرایش فایل .env:</p>
+        <div class="code-box">
+            <button class="copy-btn" onclick="copyCode(this)" id="copy5">کپی</button>
+            <code>nano /opt/pasarguard/.env</code>
+        </div>
+        <p id="s3_p2">مقادیر زیر را جایگزین کنید:</p>
+        <div class="code-box">
+            <button class="copy-btn" onclick="copyCode(this)" id="copy6">کپی</button>
+            <code>UVICORN_PORT = 443
+UVICORN_SSL_CERTFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-highlight">YOUR_DOMAIN</span>.cer"
+UVICORN_SSL_KEYFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-highlight">YOUR_DOMAIN</span>.cer.key"</code>
+        </div>
+    </div>
+
+    <div class="step-card">
+        <h2 id="s4_title">۴. نصب نود (Node)</h2>
+        <div class="code-box">
+            <button class="copy-btn" onclick="copyCode(this)" id="copy7">کپی</button>
+            <code>sudo bash -c "$(curl -sL https://github.com/PasarGuard/scripts/raw/main/pg-node.sh)" @ install</code>
+        </div>
+    </div>
+
+    <footer>
+        <p id="footer_text">طراحی شده برای جامعه کاربران ErfanXRay</p>
+    </footer>
+</div>
+
+<script>
+    let currentLang = 'fa';
+    const translations = {
+        fa: {
+            title: "نصب هوشمند پاسارگارد | ErfanXRay",
+            h_title: "🛡️ راهنمای نصب پنل پاسارگارد",
+            h_instructor: "مدرس:",
+            btn_tg: "کانال تلگرام",
+            btn_yt: "یوتیوب",
+            panel_title: "📝 اطلاعات خود را وارد کنید",
+            s1_title: "۱. نصب پنل اصلی",
+            db_label: "نوع دیتابیس:",
+            s2_title: "۲. دریافت گواهی SSL",
+            s2_p1: "نصب ابزارها:",
+            s2_p2: "نصب Acme.sh:",
+            s2_p3: "صدور گواهی:",
+            s3_title: "۳. تنظیمات Uvicorn",
+            s3_p1: "ویرایش فایل .env:",
+            s3_p2: "مقادیر زیر را جایگزین کنید:",
+            s4_title: "۴. نصب نود (Node)",
+            copy: "کپی",
+            copied: "کپی شد! ✅",
+            footer: "طراحی شده برای جامعه کاربران ErfanXRay",
+            langBtn: "English"
+        },
+        en: {
+            title: "PasarGuard Smart Install | ErfanXRay",
+            h_title: "🛡️ PasarGuard Installation Guide",
+            h_instructor: "Instructor:",
+            btn_tg: "Telegram",
+            btn_yt: "YouTube",
+            panel_title: "📝 Enter Information",
+            s1_title: "1. Install Main Panel",
+            db_label: "Database Type:",
+            s2_title: "2. Get SSL Certificate",
+            s2_p1: "Prerequisites:",
+            s2_p2: "Install Acme.sh:",
+            s2_p3: "Issue Certificate:",
+            s3_title: "3. Uvicorn Settings",
+            s3_p1: "Edit .env file:",
+            s3_p2: "Update values:",
+            s4_title: "4. Install Node",
+            copy: "Copy",
+            copied: "Copied! ✅",
+            footer: "Designed for ErfanXRay Community",
+            langBtn: "فارسی"
+        }
+    };
+
+    function toggleLanguage() {
+        currentLang = currentLang === 'fa' ? 'en' : 'fa';
+        const t = translations[currentLang];
+        const html = document.getElementById('mainHtml');
+        html.dir = currentLang === 'fa' ? 'rtl' : 'ltr';
+        html.lang = currentLang;
+
+        document.getElementById('pageTitle').innerText = t.title;
+        document.getElementById('h_title').innerText = t.h_title;
+        document.getElementById('h_instructor').innerText = t.h_instructor;
+        document.getElementById('btn_tg').innerText = t.btn_tg;
+        document.getElementById('btn_yt').innerText = t.btn_yt;
+        document.getElementById('panel_title').innerText = t.panel_title;
+        document.getElementById('s1_title').innerText = t.s1_title;
+        document.getElementById('db_label').innerText = t.db_label;
+        document.getElementById('s2_title').innerText = t.s2_title;
+        document.getElementById('s2_p1').innerText = t.s2_p1;
+        document.getElementById('s2_p2').innerText = t.s2_p2;
+        document.getElementById('s2_p3').innerText = t.s2_p3;
+        document.getElementById('s3_title').innerText = t.s3_title;
+        document.getElementById('s3_p1').innerText = t.s3_p1;
+        document.getElementById('s3_p2').innerText = t.s3_p2;
+        document.getElementById('s4_title').innerText = t.s4_title;
+        document.getElementById('footer_text').innerText = t.footer;
+        document.getElementById('langBtn').innerText = t.langBtn;
+        document.querySelectorAll('.copy-btn').forEach(btn => btn.innerText = t.copy);
+    }
+
+    const domainInput = document.getElementById('domainInput');
+    const emailInput = document.getElementById('emailInput');
+    const dbSelect = document.getElementById('dbSelect');
+    const installCommand = document.getElementById('installCommand');
+
+    domainInput.addEventListener('input', function() {
+        const val = this.value.trim() || 'YOUR_DOMAIN';
+        document.querySelectorAll('.domain-ph').forEach(el => el.textContent = val);
+    });
+
+    emailInput.addEventListener('input', function() {
+        const val = this.value.trim() || 'YOUR_EMAIL';
+        document.querySelectorAll('.email-ph').forEach(el => el.textContent = val);
+    });
+
+    dbSelect.addEventListener('change', function() {
+        const baseCmd = 'curl -fsSL https://github.com/PasarGuard/scripts/raw/main/pasarguard.sh -o /tmp/pg.sh && sudo bash /tmp/pg.sh install';
+        const db = this.value;
+        installCommand.innerText = db === 'sqlite' ? baseCmd : `${baseCmd} --database ${db}`;
+    });
+
+    function copyCode(btn) {
+        const text = btn.nextElementSibling.innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = translations[currentLang].copy;
+            btn.innerText = translations[currentLang].copied;
+            btn.style.background = "#22c55e";
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.background = "rgba(255,255,255,0.1)";
+            }, 2000);
+        });
+    }
+</script>
+
+</body>
+</html>
