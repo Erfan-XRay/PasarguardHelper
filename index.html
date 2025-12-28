@@ -33,7 +33,6 @@
             padding: 20px;
         }
 
-        /* دکمه تغییر زبان */
         .lang-switch {
             position: fixed;
             top: 20px;
@@ -82,7 +81,6 @@
         .yt { background: var(--youtube); }
         .tg { background: var(--telegram); }
 
-        /* اصلاح پنل ورودی‌ها */
         .config-panel {
             background: rgba(56, 189, 248, 0.08);
             border: 1px solid var(--primary-color);
@@ -101,13 +99,13 @@
 
         .input-group {
             display: flex;
-            flex-direction: row; /* در دسکتاپ کنار هم */
+            flex-direction: row;
             gap: 20px;
             width: 100%;
         }
 
         .input-wrapper {
-            flex: 1; /* تقسیم مساوی فضا */
+            flex: 1;
             position: relative;
             min-width: 200px;
         }
@@ -125,7 +123,6 @@
             transition: 0.3s;
         }
 
-        /* تنظیم پدینگ و آیکون بر اساس جهت صفحه */
         #mainHtml[dir="rtl"] input { padding: 0 45px 0 15px; text-align: left; }
         #mainHtml[dir="ltr"] input { padding: 0 15px 0 45px; text-align: left; }
 
@@ -142,7 +139,6 @@
 
         input:focus { border-color: var(--primary-color); background: #1e293b; }
 
-        /* استایل مراحل */
         .step-card {
             background: var(--card-bg);
             border-radius: 15px;
@@ -165,7 +161,7 @@
 
         #mainHtml[dir="ltr"] .code-box { border-right: none; border-left: 4px solid var(--primary-color); }
 
-        code { font-family: 'Consolas', 'Monaco', monospace; font-size: 0.95rem; color: #cbd5e1; word-break: break-all; }
+        code { font-family: 'Consolas', 'Monaco', monospace; font-size: 0.95rem; color: #cbd5e1; word-break: break-all; white-space: pre-wrap; }
 
         .var-highlight { color: var(--highlight-color); font-weight: bold; }
 
@@ -181,18 +177,16 @@
             cursor: pointer;
             font-size: 0.75rem;
             transition: 0.3s;
+            z-index: 10;
         }
 
         .copy-btn:hover { background: var(--primary-color); color: var(--bg-color); }
 
         footer { text-align: center; padding: 40px 0; opacity: 0.5; font-size: 0.9rem; }
 
-        /* رسپانسیو برای موبایل */
         @media (max-width: 768px) {
-            .input-group { flex-direction: column; } /* زیر هم قرار گرفتن در موبایل */
+            .input-group { flex-direction: column; }
             .input-wrapper { width: 100%; }
-            .config-panel { padding: 15px; }
-            header h1 { font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -280,12 +274,18 @@ mkdir -p /var/lib/pasarguard/certs
             <button class="copy-btn" onclick="copyCode(this)" id="copy5">کپی</button>
             <code>nano /opt/pasarguard/.env</code>
         </div>
-        <p id="s3_p2">مقادیر زیر را جایگزین کنید:</p>
+        <p id="s3_p2">مقادیر زیر را جایگزین کنید (هر ۳ خط):</p>
         <div class="code-box">
             <button class="copy-btn" onclick="copyCode(this)" id="copy6">کپی</button>
             <code>UVICORN_PORT = 443
 UVICORN_SSL_CERTFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-highlight">YOUR_DOMAIN</span>.cer"
 UVICORN_SSL_KEYFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-highlight">YOUR_DOMAIN</span>.cer.key"</code>
+        </div>
+        
+        <p id="s3_p3" style="color: var(--primary-color); margin-top: 25px; font-weight: bold;">حالا برای اعمال تغییرات، پنل را ریستارت کنید:</p>
+        <div class="code-box">
+            <button class="copy-btn" onclick="copyCode(this)" id="copy_restart">کپی</button>
+            <code>pasarguard restart</code>
         </div>
     </div>
 
@@ -320,7 +320,8 @@ UVICORN_SSL_KEYFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-high
             s2_p3: "صدور گواهی:",
             s3_title: "۳. تنظیمات Uvicorn",
             s3_p1: "ویرایش فایل .env:",
-            s3_p2: "مقادیر زیر را جایگزین کنید:",
+            s3_p2: "مقادیر زیر را جایگزین کنید (هر ۳ خط):",
+            s3_p3: "حالا برای اعمال تغییرات، پنل را ریستارت کنید:",
             s4_title: "۴. نصب نود (Node)",
             copy: "کپی",
             copied: "کپی شد! ✅",
@@ -342,7 +343,8 @@ UVICORN_SSL_KEYFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-high
             s2_p3: "Issue Certificate:",
             s3_title: "3. Uvicorn Settings",
             s3_p1: "Edit .env file:",
-            s3_p2: "Update values:",
+            s3_p2: "Update values (all 3 lines):",
+            s3_p3: "Now, restart the panel to apply changes:",
             s4_title: "4. Install Node",
             copy: "Copy",
             copied: "Copied! ✅",
@@ -373,10 +375,14 @@ UVICORN_SSL_KEYFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-high
         document.getElementById('s3_title').innerText = t.s3_title;
         document.getElementById('s3_p1').innerText = t.s3_p1;
         document.getElementById('s3_p2').innerText = t.s3_p2;
+        document.getElementById('s3_p3').innerText = t.s3_p3;
         document.getElementById('s4_title').innerText = t.s4_title;
         document.getElementById('footer_text').innerText = t.footer;
         document.getElementById('langBtn').innerText = t.langBtn;
-        document.querySelectorAll('.copy-btn').forEach(btn => btn.innerText = t.copy);
+        
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            if(!btn.innerText.includes('✅')) btn.innerText = t.copy;
+        });
     }
 
     const domainInput = document.getElementById('domainInput');
