@@ -16,6 +16,7 @@
             --highlight-color: #facc15;
             --youtube: #ef4444;
             --telegram: #0ea5e9;
+            --github: #333;
         }
 
         body {
@@ -80,6 +81,7 @@
         .btn-social:hover { transform: translateY(-3px); filter: brightness(1.2); }
         .yt { background: var(--youtube); }
         .tg { background: var(--telegram); }
+        .gh { background: var(--github); border: 1px solid #555; }
 
         .config-panel {
             background: rgba(56, 189, 248, 0.08);
@@ -208,6 +210,9 @@
             <a href="https://www.youtube.com/@Erfan_XRay" target="_blank" class="btn-social yt">
                 <i class="fab fa-youtube"></i> <span id="btn_yt">یوتیوب</span>
             </a>
+            <a href="https://github.com/PasarGuard/panel" target="_blank" class="btn-social gh">
+                <i class="fab fa-github"></i> <span id="btn_gh">گیت‌هاب پنل</span>
+            </a>
         </div>
     </header>
 
@@ -311,6 +316,7 @@ UVICORN_SSL_KEYFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-high
             h_instructor: "مدرس:",
             btn_tg: "کانال تلگرام",
             btn_yt: "یوتیوب",
+            btn_gh: "گیت‌هاب پنل",
             panel_title: "📝 اطلاعات خود را وارد کنید",
             s1_title: "۱. نصب پنل اصلی",
             db_label: "نوع دیتابیس:",
@@ -334,6 +340,7 @@ UVICORN_SSL_KEYFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-high
             h_instructor: "Instructor:",
             btn_tg: "Telegram",
             btn_yt: "YouTube",
+            btn_gh: "GitHub Repo",
             panel_title: "📝 Enter Information",
             s1_title: "1. Install Main Panel",
             db_label: "Database Type:",
@@ -365,6 +372,7 @@ UVICORN_SSL_KEYFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-high
         document.getElementById('h_instructor').innerText = t.h_instructor;
         document.getElementById('btn_tg').innerText = t.btn_tg;
         document.getElementById('btn_yt').innerText = t.btn_yt;
+        document.getElementById('btn_gh').innerText = t.btn_gh;
         document.getElementById('panel_title').innerText = t.panel_title;
         document.getElementById('s1_title').innerText = t.s1_title;
         document.getElementById('db_label').innerText = t.db_label;
