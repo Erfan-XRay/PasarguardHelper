@@ -18,6 +18,7 @@
             --telegram: #0ea5e9;
             --github: #333;
             --useful-link-bg: rgba(74, 222, 128, 0.1);
+            --warning-color: #fbbf24;
         }
 
         body {
@@ -185,6 +186,14 @@
 
         .copy-btn:hover { background: var(--primary-color); color: var(--bg-color); }
 
+        .warning-box {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid var(--warning-color);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
         .useful-links-section {
             margin: 40px 0;
             padding: 20px;
@@ -314,7 +323,7 @@ mkdir -p /var/lib/pasarguard/certs
     </div>
 
     <div class="step-card">
-        <h2 id="s3_title">۳. تنظیمات Uvicorn</h2>
+        <h2 id="s3_title">۳. تنظیمات Uvicorn و بررسی نهایی</h2>
         <p id="s3_p1">ویرایش فایل .env:</p>
         <div class="code-box">
             <button class="copy-btn" onclick="copyCode(this)" id="copy5">کپی</button>
@@ -328,27 +337,21 @@ UVICORN_SSL_CERTFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-hig
 UVICORN_SSL_KEYFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-highlight">YOUR_DOMAIN</span>.cer.key"</code>
         </div>
 
-        <hr style="margin: 25px 0; border: none; border-top: 1px solid rgba(255,255,255,0.1);">
-        
-        <p id="s3_p_paths" style="color: var(--highlight-color); font-weight: bold; margin-bottom: 10px;">کپی مجزای مسیر فایل‌های SSL:</p>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 0.8rem; min-width: 80px; opacity: 0.8;">Fullchain:</span>
-                <div class="code-box" style="margin-top: 0; padding: 12px; flex: 1;">
-                    <button class="copy-btn" onclick="copyCode(this)" style="top:5px; right:5px;">کپی</button>
-                    <code>/var/lib/pasarguard/certs/<span class="domain-ph">YOUR_DOMAIN</span>.cer</code>
-                </div>
+        <div class="warning-box">
+            <p id="port_check_text" style="margin-top:0; font-weight:bold;">⚠️ قبل از ریستارت، از آزاد بودن پورت ۴۴۳ مطمئن شوید:</p>
+            <div class="code-box" style="margin-bottom:15px;">
+                <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                <code>sudo ss -tulpn | grep :443</code>
             </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 0.8rem; min-width: 80px; opacity: 0.8;">Key File:</span>
-                <div class="code-box" style="margin-top: 0; padding: 12px; flex: 1;">
-                    <button class="copy-btn" onclick="copyCode(this)" style="top:5px; right:5px;">کپی</button>
-                    <code>/var/lib/pasarguard/certs/<span class="domain-ph">YOUR_DOMAIN</span>.cer.key</code>
-                </div>
+            <p id="nginx_disable_text" style="font-size:0.9rem; opacity:0.9;">اگر خروجی دستور بالا شامل **nginx** بود، آن را غیرفعال کنید:</p>
+            <div class="code-box">
+                <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                <code>sudo systemctl stop nginx
+sudo systemctl disable nginx</code>
             </div>
         </div>
-
-        <p id="s3_p3" style="color: var(--primary-color); margin-top: 25px; font-weight: bold;">حالا برای اعمال تغییرات، پنل را ریستارت کنید:</p>
+        
+        <p id="s3_p3" style="color: var(--primary-color); font-weight: bold;">حالا برای اعمال تغییرات، پنل را ریستارت کنید:</p>
         <div class="code-box">
             <button class="copy-btn" onclick="copyCode(this)" id="copy_restart">کپی</button>
             <code>pasarguard restart</code>
@@ -399,10 +402,11 @@ UVICORN_SSL_KEYFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-high
             s2_p1: "نصب ابزارها:",
             s2_p2: "نصب Acme.sh:",
             s2_p3: "صدور گواهی:",
-            s3_title: "۳. تنظیمات Uvicorn",
+            s3_title: "۳. تنظیمات Uvicorn و بررسی نهایی",
             s3_p1: "ویرایش فایل .env:",
             s3_p2: "مقادیر زیر را جایگزین کنید (هر ۳ خط):",
-            s3_p_paths: "کپی مجزای مسیر فایل‌های SSL:",
+            port_check_text: "⚠️ قبل از ریستارت، از آزاد بودن پورت ۴۴۳ مطمئن شوید:",
+            nginx_disable_text: "اگر خروجی دستور بالا شامل **nginx** بود، آن را غیرفعال کنید:",
             s3_p3: "حالا برای اعمال تغییرات، پنل را ریستارت کنید:",
             s4_title: "۴. نصب نود (Node)",
             useful_links_h: "لینک‌های مفید",
@@ -425,10 +429,11 @@ UVICORN_SSL_KEYFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-high
             s2_p1: "Prerequisites:",
             s2_p2: "Install Acme.sh:",
             s2_p3: "Issue Certificate:",
-            s3_title: "3. Uvicorn Settings",
+            s3_title: "3. Uvicorn & Port Check",
             s3_p1: "Edit .env file:",
             s3_p2: "Update values (all 3 lines):",
-            s3_p_paths: "Copy SSL Paths Separately:",
+            port_check_text: "⚠️ Before restarting, check if Port 443 is free:",
+            nginx_disable_text: "If the output shows **nginx**, disable it using these commands:",
             s3_p3: "Now, restart the panel to apply changes:",
             s4_title: "4. Install Node",
             useful_links_h: "Useful Links",
@@ -462,7 +467,8 @@ UVICORN_SSL_KEYFILE = "/var/lib/pasarguard/certs/<span class="domain-ph var-high
         document.getElementById('s3_title').innerText = t.s3_title;
         document.getElementById('s3_p1').innerText = t.s3_p1;
         document.getElementById('s3_p2').innerText = t.s3_p2;
-        document.getElementById('s3_p_paths').innerText = t.s3_p_paths;
+        document.getElementById('port_check_text').innerText = t.port_check_text;
+        document.getElementById('nginx_disable_text').innerText = t.nginx_disable_text;
         document.getElementById('s3_p3').innerText = t.s3_p3;
         document.getElementById('s4_title').innerText = t.s4_title;
         document.getElementById('useful_links_h').innerText = t.useful_links_h;
